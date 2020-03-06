@@ -1,4 +1,4 @@
-package controller;
+package gui.controller;
 
 import java.net.URL;
 import java.util.ArrayList;
