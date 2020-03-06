@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class DepartmentListController implements Initializable {
+public class ListDepartmentController implements Initializable {
 	
 	private DepartmentService service;
 	
@@ -48,7 +48,8 @@ public class DepartmentListController implements Initializable {
 	@FXML
 	public void onNewButtonAction(ActionEvent event) {
 		Stage parentStage = Tools.currentStage(event);
-		createDialogForm(parentStage, "DepartmentForm");
+		Department department = new Department();
+		createDialogForm(department, parentStage, "FormDepartment");
 	}
 
 	@Override
@@ -77,11 +78,16 @@ public class DepartmentListController implements Initializable {
 		departmentTableView.setItems(obsList);
 	}
 	
-	private void createDialogForm(Stage parentStage, String absoluteName) {
+	private void createDialogForm(Department department, Stage parentStage, String absoluteName) {
 		try {
 			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+absoluteName+ ".fxml"));			
 			Pane pane = loader.load();
+			
+			FormDepartmentController controller = loader.getController();
+			controller.setDepartment(department);
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateFromData();
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Enter Department data");
