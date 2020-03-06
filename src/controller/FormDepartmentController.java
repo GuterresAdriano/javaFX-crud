@@ -1,11 +1,14 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.util.*;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Tools;
@@ -21,9 +24,9 @@ import model.services.DepartmentService;
 
 public class FormDepartmentController implements Initializable {
 
-	private Department department;
-	
+	private Department department;	
 	private DepartmentService departmentService;
+	private List<DataChangeListener> changeListeners = new ArrayList<DataChangeListener>();
 
 	@FXML
 	private TextField idTextField;
@@ -47,6 +50,7 @@ public class FormDepartmentController implements Initializable {
 		try {
 			this.department = getFormData();		
 			this.departmentService.saveOrUpdat(department);
+			notifyDataChangeListeners();
 			Tools.currentStage(event).close();
 			
 		} catch (DbException e) {
@@ -55,15 +59,21 @@ public class FormDepartmentController implements Initializable {
 		
 	}
 	
+	private void notifyDataChangeListeners() {
+		for (DataChangeListener x : changeListeners) {
+			x.onDataChanged();
+		}
+		
+	}
+
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		this.changeListeners.add(listener);
+	}
+	
 	private Department getFormData() {
 		Department department = new Department();
-		
-		System.out.println("id: "+Tools.tryParseToInt(idTextField.getText()));
-		System.out.println("Name: "+nameTextField.getText());
-		
 		department.setId(Tools.tryParseToInt(idTextField.getText()));
 		department.setName(nameTextField.getText());
-		
 		return department;
 	}
 
