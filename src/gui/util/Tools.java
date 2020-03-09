@@ -1,6 +1,8 @@
 package gui.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
@@ -9,9 +11,11 @@ import com.mysql.jdbc.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class Tools {
 
@@ -65,5 +69,33 @@ public class Tools {
 			return cell;
 		});
 	}
+	
+	public static void formatDatePicker(DatePicker datePicker, String format) {
+		datePicker.setConverter(new StringConverter<LocalDate>() {
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
+			{
+				datePicker.setPromptText(format.toLowerCase());
+			}
+						
+			
+			@Override
+			public String toString(LocalDate date) {
+				if(date != null) {
+					return dateTimeFormatter.format(date);
+				}
+				return "";
+			}
+			
+			@Override
+			public LocalDate fromString(String string) {
+				if(string != null) {
+					return LocalDate.parse(string, dateTimeFormatter);
+				}
+				return null;
+			}
+		});
+		
+	}
+	
 
 }

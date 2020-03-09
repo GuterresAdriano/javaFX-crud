@@ -30,7 +30,7 @@ public class MainController implements Initializable{
 	
 	@FXML
 	public void onSellerMenuItemAction() {
-		loadView("ListSeller", (ListSellerController sellerServCrtl)->{
+		loadView("SellerList", (SellerListController sellerServCrtl)->{
 			sellerServCrtl.setSellerService(new SellerService());
 			sellerServCrtl.updateTableView();
 		});
@@ -38,7 +38,7 @@ public class MainController implements Initializable{
 	
 	@FXML
 	public void onDepartmentMenuItemAction() {
-		loadView("ListDepartment", (ListDepartmentController depServCrtl)->{
+		loadView("DepartmentList", (DepartmentListController depServCrtl)->{
 			depServCrtl.setDepartmentService(new DepartmentService());
 			depServCrtl.updateTableView();
 		});
@@ -49,9 +49,9 @@ public class MainController implements Initializable{
 		loadView("About", x-> {});
 	}
 	
-	private  synchronized <T> void loadView(String absoluteName, Consumer<T> inicializingAction) {
+	private  synchronized <T> void loadView(String viewName, Consumer<T> inicializingAction) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+absoluteName+ ".fxml"));			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+viewName+ ".fxml"));			
 			VBox newBox = loader.load();
 			
 			Scene  mainScene = Main.getMainScene();

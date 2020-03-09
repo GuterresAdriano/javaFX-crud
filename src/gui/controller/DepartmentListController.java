@@ -31,7 +31,7 @@ import javafx.stage.Stage;
 import model.entities.Department;
 import model.services.DepartmentService;
 
-public class ListDepartmentController implements Initializable, DataChangeListener {
+public class DepartmentListController implements Initializable, DataChangeListener {
 
 	private DepartmentService service;
 
@@ -55,7 +55,7 @@ public class ListDepartmentController implements Initializable, DataChangeListen
 	public void onNewButtonAction(ActionEvent event) {
 		Stage parentStage = Tools.currentStage(event);
 		Department department = new Department();
-		createDialogForm(department, parentStage, "FormDepartment");
+		createDialogForm(department, parentStage, "DepartmentForm");
 	}
 
 	@Override
@@ -86,13 +86,13 @@ public class ListDepartmentController implements Initializable, DataChangeListen
 		initRemoveButtons();
 	}
 
-	private void createDialogForm(Department department, Stage parentStage, String absoluteName) {
+	private void createDialogForm(Department department, Stage parentStage, String viewName) {
 		try {
 
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+absoluteName+ ".fxml"));			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+viewName+ ".fxml"));			
 			Pane pane = loader.load();
 
-			FormDepartmentController controller = loader.getController();
+			DepartmentFormController controller = loader.getController();
 			controller.setDepartment(department);
 			controller.setDepartmentService(new DepartmentService());
 
@@ -125,7 +125,7 @@ public class ListDepartmentController implements Initializable, DataChangeListen
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(	event -> createDialogForm(obj, Tools.currentStage(event),"FormDepartment"));
+				button.setOnAction(	event -> createDialogForm(obj, Tools.currentStage(event),"DepartmentForm"));
 			}
 		});
 	}

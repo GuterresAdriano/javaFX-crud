@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -29,14 +30,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.entities.Department;
 import model.entities.Seller;
+import model.services.DepartmentService;
 import model.services.SellerService;
 
-public class ListSellerController implements Initializable, DataChangeListener {
+public class SellerListController implements Initializable, DataChangeListener {
 
 	private SellerService service;
-
-	private ObservableList<Seller> obsList;
+	private ObservableList<Seller> obsListSellers;
 
 	@FXML
 	private Button newButton;
@@ -57,13 +59,15 @@ public class ListSellerController implements Initializable, DataChangeListener {
 	private TableColumn<Seller, Seller> editSellerTableColumn;
 	@FXML
 	private TableColumn<Seller, Seller> removeSellerTableColumn;
+	@FXML
+	private ComboBox<Department> depatmentCombobox;
 
 
 	@FXML
 	public void onNewButtonAction(ActionEvent event) {
 		Stage parentStage = Tools.currentStage(event);
 		Seller seller = new Seller();
-		createDialogForm(seller, parentStage, "FormSeller");
+		createDialogForm(seller, parentStage, "SellerForm" );
 	}
 
 	@Override
@@ -78,9 +82,7 @@ public class ListSellerController implements Initializable, DataChangeListener {
 		birthDateSellerTableColumn.setCellValueFactory(new PropertyValueFactory<Seller, Date>("birthDate"));
 		Tools.formatTableColumnDate(birthDateSellerTableColumn, "dd/MM/yyyy");
 		baseSalarySellerTableColumn.setCellValueFactory(new PropertyValueFactory<Seller, Double>("baseSalary"));
-		Tools.formatTableColumnDouble(baseSalarySellerTableColumn, 2);
-		
-		
+		Tools.formatTableColumnDouble(baseSalarySellerTableColumn, 2);				
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		sellerTableView.prefHeightProperty().bind(stage.heightProperty());
@@ -95,37 +97,40 @@ public class ListSellerController implements Initializable, DataChangeListener {
 			throw new IllegalStateException("Service is null");
 		}		
 		List<Seller> list = service.findAll();
-		obsList = FXCollections.observableArrayList(list);
-		sellerTableView.setItems(obsList);
+		obsListSellers = FXCollections.observableArrayList(list);
+		sellerTableView.setItems(obsListSellers);
 		initEditButtons();
 		initRemoveButtons();
 	}
 
-	private void createDialogForm(Seller seller, Stage parentStage, String absoluteName) {
-//		try {
-//
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+absoluteName+ ".fxml"));			
-//			Pane pane = loader.load();
-//
-//			FormSellerController controller = loader.getController();
-//			controller.setSeller(seller);
-//			controller.setSellerService(new SellerService());
-//
-//			controller.subscribeDataChangeListener(this);
-//
-//			controller.updateFromData();			
-//
-//			Stage dialogStage = new Stage();
-//			dialogStage.setTitle("Enter Seller data");
-//			dialogStage.setScene(new Scene(pane));
-//			dialogStage.setResizable(false);
-//			dialogStage.initOwner(parentStage);	
-//			dialogStage.initModality(Modality.WINDOW_MODAL);
-//			dialogStage.showAndWait();			
-//
-//		} catch (IOException e) {
-//			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
-//		}	
+	private void createDialogForm(Seller seller, Stage parentStage, String viewName) {
+		try {
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/"+viewName+ ".fxml"));			
+			Pane pane = loader.load();
+
+			SellerFormController controller = loader.getController();
+			controller.setSeller(seller);
+			controller.setServices(new SellerService(), new DepartmentService());
+			controller.loadAssicietedObjects();
+
+			controller.subscribeDataChangeListener(this);
+
+			controller.updateFromData();			
+
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Enter Seller data");
+			dialogStage.setScene(new Scene(pane));
+			dialogStage.setResizable(false);
+			dialogStage.initOwner(parentStage);	
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.showAndWait();			
+
+		} catch (IOException e) {
+		//	Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);
+		
+			e.printStackTrace();
+		}	
 	}
 
 	private void initEditButtons() {
@@ -140,7 +145,7 @@ public class ListSellerController implements Initializable, DataChangeListener {
 					return;
 				}
 				setGraphic(button);
-				button.setOnAction(	event -> createDialogForm(obj, Tools.currentStage(event),"FormSeller"));
+				button.setOnAction(	event -> createDialogForm(obj, Tools.currentStage(event),"SellerForm"));
 			}
 		});
 	}

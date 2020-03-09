@@ -3,22 +3,27 @@ package gui.util;
 import javafx.scene.control.TextField;
 
 public class Constraints {
-	public static void limitTextFieldInteger(TextField field) {
-		field.textProperty().addListener((observable, oldValue, newValue) -> {
-			field.setText(newValue != null && !newValue.matches("\\d*")? oldValue: newValue);
-		});		
-	}
-	
-	public static void limitTextFieldMaxLength(TextField field, int max) {
-		field.textProperty().addListener((observable, oldValue, newValue) -> {
-			field.setText(newValue != null && newValue.length() > max? oldValue: newValue);
-		});		
-	}
-	
-	public static void limitTextFieldDouble(TextField field) {
-		field.textProperty().addListener((observable, oldValue, newValue) -> {
-			field.setText(newValue != null && !newValue.matches("\\d*([\\.]\\d*)")? oldValue: newValue);
-		});		
+	public static void limitTextFieldInteger(TextField txt) {
+		txt.textProperty().addListener((obs, oldValue, newValue) -> {
+	        if (newValue != null && !newValue.matches("\\d*")) {
+	        	txt.setText(oldValue);
+	        }
+	    });
 	}
 
+	public static void limitTextFieldMaxLength(TextField txt, int max) {
+		txt.textProperty().addListener((obs, oldValue, newValue) -> {
+	        if (newValue != null && newValue.length() > max) {
+	        	txt.setText(oldValue);
+	        }
+	    });
+	}
+
+	public static void limitTextFieldDouble(TextField txt) {
+		txt.textProperty().addListener((obs, oldValue, newValue) -> {
+		    	if (newValue != null && !newValue.matches("\\d*([\\.]\\d*)?")) {
+                    txt.setText(oldValue);
+                }
+		    });
+	}
 }
