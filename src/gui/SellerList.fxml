@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="318.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.SellerListController">
+   <children>
+      <Label text="Seller Registration">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="5.0" top="5.0" />
+         </VBox.margin>
+      </Label>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="newButton" mnemonicParsing="false" onAction="#onNewButtonAction" text="New" />
+        </items>
+      </ToolBar>
+      <TableView fx:id="sellerTableView" prefHeight="269.0" prefWidth="470.0">
+        <columns>
+          <TableColumn fx:id="idSellerTableColumn" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="nameSellerTableColumn" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="emailSellerTableColumn" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="birthDateSellerTableColumn" prefWidth="75.0" text="Birth" />
+            <TableColumn fx:id="baseSalarySellerTableColumn" prefWidth="75.0" text="Salary" />
+            <TableColumn fx:id="editSellerTableColumn" prefWidth="75.0" />
+            <TableColumn fx:id="removeSellerTableColumn" prefWidth="75.0" />
+        </columns>         
+      </TableView>
+   </children>
+</VBox>
